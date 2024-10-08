@@ -1,95 +1,38 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client"
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+import { useEffect, useState } from "react";
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+
+const Page = () => {
+    const [article, setArticle] = useState([]);
+    // const [data, setData] = useState("")
+
+    useEffect(() => {   
+     async function fetchArticles() {
+        const response = await fetch(`https://dev.to/api/articles?per_page=10&page=1`)
+        const data1 = await response.json();
+        setArticle(data1)
+        console.log(data1)
+     };
+     fetchArticles();
+    }, []);
+    return (
+        <div>
+            <h1>All Blog Post</h1>
+            {article.map((articles) => (
+               <div key={articles.id} className="article-image">
+                <div className="article-description">{article.description}</div>
+               <img className="article-image"
+                   src={articles.cover_image}/>
+                   <div className="article-tag">{article.tags}</div>
+                   <div className="page-title">{articles.title}</div>
+                   <div className="user-profile">{articles.profile_image}</div>
+                   <div className="user-name">{article.username}</div>
+                   <div className="user-date">{article.readable_publish_date}</div>
+              </div>
+            ))}
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
-}
+ );
+};
+
+export default Page;
