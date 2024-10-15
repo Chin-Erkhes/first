@@ -1,6 +1,6 @@
 "use client"
 
-const { usePathname } = require("next/navigation") 
+import { usePathname } from "next/navigation" 
 
 const Page = () => {
     const pathName = usePathname();
